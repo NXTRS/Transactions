@@ -23,6 +23,20 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       auto-offset-reset: latest  # remembers the last read offset at application restart
       group-id: my-group-id
-
+  security.oauth2:
+    client:
+      registration:
+        keycloak:
+          client-id: luciantestclient
+          authorization-grant-type: authorization_code
+          scope: openid
+      provider:
+        keycloak:
+          issuer-uri: http://localhost:8082/realms/NotificationRealm
+          user-name-attribute: preferred_username
+    resourceserver:
+      jwt:
+        issuer-uri: http://localhost:8082/realms/NotificationRealm
+        jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 app:
   transaction-limit: 100.0

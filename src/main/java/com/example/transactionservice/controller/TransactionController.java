@@ -49,10 +49,10 @@ public class TransactionController {
 
         var transactionPage = transactionService.getTransactions(userId, PageRequest.of(page, size));
 
-        // Convert each transaction to an EntityModel and add HATEOAS links
+        // Convert each transaction to an EntityModel and add HATEOAS links for every element
         var pagedModel = convertToEntityModel(page, size, transactionPage);
 
-        // Adding pagination links
+        // Add pagination links
         addPaginationLinks(userId, page, size, transactionPage, pagedModel);
 
         return new ResponseEntity<>(pagedModel, HttpStatus.OK);
