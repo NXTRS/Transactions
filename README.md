@@ -9,12 +9,17 @@ Dependencies (Kafka, Postgres) are provided in a docker container.
 ## How to run locally
 Docker Desktop must be installed on your system.
 
-1. Run the terminal command (for example, from the Intellij temrinal)
+1. Run the terminal command for this project (for example, from the Intellij terminal)
 > docker compose up -d
-2. Run the spring boot application. It will start on port **8080**.
-3. The application db schema is generated automatically by spring 
-   via the *"spring.jpa.generate-ddl: true"* property
-4. There is a Postman collection that can be imported to test the REST endpoints
+2. Before starting the app, you need to execute the docker compose.yaml file defined in this repo https://github.com/NXTRS/Notifications
+    because it will start the Keycloak container. App will start without it, but you cannot authenticate before running 
+> docker compose up -d 
+ 
+   in the Notifications project as well. 
+3. Run the spring boot application. It will start on port **8080**.
+4. The application db schema is generated automatically by spring 
+   via the *"spring.jpa.generate-ddl: true"* property, nothing needs to be done
+5. There is a Postman collection that can be imported to test the REST endpoints
 
 ## Integration tests
 

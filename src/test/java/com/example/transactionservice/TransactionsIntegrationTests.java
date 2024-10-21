@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -27,6 +28,7 @@ public class TransactionsIntegrationTests extends BaseTest {
     void testCreateTransaction_shouldSendNotificationSuccessfully() {
         client.post()
                 .uri(builder -> builder.path("api/transactions").build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .bodyValue(TransactionDto.builder().userId(USER_1).amount(101d).build())
                 .exchange()
                 .expectStatus().isCreated()
@@ -44,6 +46,7 @@ public class TransactionsIntegrationTests extends BaseTest {
     void testCreateTransaction_shouldSucceedWithoutNotification() {
         client.post()
                 .uri(builder -> builder.path("api/transactions").build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .bodyValue(TransactionDto.builder().userId(USER_1).amount(99d).build())
                 .exchange()
                 .expectStatus().isCreated()
@@ -55,12 +58,21 @@ public class TransactionsIntegrationTests extends BaseTest {
 
         verify(kafkaConsumer, never()).listener(eventCaptor.capture());
     }
+    @Test
+    void testCreateTransaction_shouldFailWithUnauthorized() {
+        client.post()
+                .uri(builder -> builder.path("api/transactions").build())
+                .bodyValue(TransactionDto.builder().userId(USER_1).amount(99d).build())
+                .exchange()
+                .expectStatus().isUnauthorized();
+    }
 
     @ParameterizedTest
     @MethodSource("generateInvalidTransactionFields")
     void testCreateTransaction_shouldFail(String userId, Double amount) {
         client.post()
                 .uri(builder -> builder.path(API_PATH).build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .bodyValue(TransactionDto.builder().userId(userId).amount(amount).build())
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -76,6 +88,7 @@ public class TransactionsIntegrationTests extends BaseTest {
                         .queryParam("page", page)
                         .queryParam("size", size)
                         .build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -94,6 +107,7 @@ public class TransactionsIntegrationTests extends BaseTest {
                         .queryParam("page", 0)
                         .queryParam("size", 50)
                         .build())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
