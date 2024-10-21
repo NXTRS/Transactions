@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "userId": "asd123-user1",
+  "amount": 99.0,
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/api/transactions/1"
+    }
+  }
+}

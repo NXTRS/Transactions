@@ -1,0 +1,46 @@
+{
+  "_embedded": {
+    "transactionDtoList": [
+      {
+        "id": 23,
+        "userId": "asd123-user2",
+        "amount": 227.0,
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/api/transactions/23"
+          }
+        }
+      },
+      {
+        "id": 24,
+        "userId": "asd123-user2",
+        "amount": 380.0,
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/api/transactions/24"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/api/transactions?userId=asd123-user2&page=1&size=10"
+    },
+    "prev": {
+      "href": "http://localhost:8080/api/transactions?userId=asd123-user2&page=0&size=10"
+    },
+    "first": {
+      "href": "http://localhost:8080/api/transactions?userId=asd123-user2&page=0&size=10"
+    },
+    "last": {
+      "href": "http://localhost:8080/api/transactions?userId=asd123-user2&page=1&size=10"
+    }
+  },
+  "page": {
+    "size": 10,
+    "totalElements": 12,
+    "totalPages": 2,
+    "number": 1
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/api/transactions?userId=asd123-user1&page=0&size=50"
+    }
+  },
+  "page": {
+    "size": 50,
+    "totalElements": 0,
+    "totalPages": 0,
+    "number": 0
+  }
+}
