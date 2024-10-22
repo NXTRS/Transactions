@@ -3,6 +3,7 @@ package com.example.transactionservice.messaging;
 import com.example.transactionservice.model.TransactionDto;
 import com.example.transactionservice.utils.GenericJsonSerializer;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @AllArgsConstructor
+@Slf4j
 public class PushTransactionNotificationAspect {
 
     @Value("${app.transaction-limit}")
@@ -28,7 +30,6 @@ public class PushTransactionNotificationAspect {
 
     @AfterReturning(pointcut = "pushTransactionNotificationPointcut()", returning = "result")
     public void checkAndPushNotification(Object result) {
-
         var transaction = (TransactionDto) result;
         if (transaction.amount() > transactionLimit) {
             kafkaTemplate.send(new ProducerRecord<>(
@@ -36,8 +37,8 @@ public class PushTransactionNotificationAspect {
                     transaction.userId(),
                     jsonSerializer.serialize(transaction)));
 
-            System.out.println("========= Pushed Notification with id: " + transaction.id()  + " for user: "
-                    + transaction.userId() +  " to topic: " + outputTopic + " =========");
+            log.info("Pushed transaction event with id: {} for user: {} on topic {}",
+                    transaction.id(), transaction.userId(), outputTopic);
         }
     }
 }

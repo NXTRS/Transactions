@@ -4,6 +4,7 @@ import com.example.transactionservice.model.TransactionDto;
 import com.example.transactionservice.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -16,8 +17,9 @@ import static com.example.transactionservice.utils.HateoasHelper.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@RestController
+@Slf4j
 @RequiredArgsConstructor
+@RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
 
@@ -28,6 +30,7 @@ public class TransactionController {
      */
     @PostMapping
     public ResponseEntity<EntityModel<TransactionDto>> createTransaction(@RequestBody @Valid TransactionDto transactionDto) {
+        log.info("Received new transaction request for user: {}", transactionDto.userId());
         var createdTransactionDto = transactionService.createTransaction(transactionDto);
         var entityModel = EntityModel.of(createdTransactionDto);
 
@@ -39,19 +42,16 @@ public class TransactionController {
     }
 
     /**
-     * Read a paginated list of transactions with HATEOAS links
+     * Read a paginated list of transactions
      */
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<TransactionDto>>> getTransactions(
-            @RequestParam String userId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
+    public ResponseEntity<PagedModel<EntityModel<TransactionDto>>> getTransactions(@RequestParam String userId,
+                                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                                   @RequestParam(defaultValue = "10") int size) {
+        log.info("Received get transactions request with page: {}, size: {} for user: {}", page, size, userId);
         var transactionPage = transactionService.getTransactions(userId, PageRequest.of(page, size));
-
         // Convert each transaction to an EntityModel and add HATEOAS links for every element
         var pagedModel = convertToEntityModel(page, size, transactionPage);
-
         // Add pagination links
         addPaginationLinks(userId, page, size, transactionPage, pagedModel);
 
@@ -64,7 +64,6 @@ public class TransactionController {
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<TransactionDto>> getTransaction(@PathVariable Long id) {
         var transaction = transactionService.getTransactionById(id);
-
         if (transaction == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

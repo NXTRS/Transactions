@@ -19,7 +19,7 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
 public class AuthenticationTestUtils {
-    public static String createJWTToken(PrivateKey privateKey, String userId, Date expiration) {
+    public static String mockJWTToken(PrivateKey privateKey, String userId, Date expiration) {
         var claims = new HashMap<String, Object>();
         claims.put("iss", "http://localhost/");
 

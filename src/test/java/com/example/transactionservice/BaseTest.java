@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.security.KeyPair;
 import java.util.Date;
 
-import static com.example.transactionservice.config.AuthenticationTestUtils.createJWTToken;
+import static com.example.transactionservice.config.AuthenticationTestUtils.mockJWTToken;
 import static com.example.transactionservice.config.AuthenticationTestUtils.mockOauth2JwksEndpoint;
 import static io.jsonwebtoken.impl.crypto.RsaProvider.generateKeyPair;
 import static java.util.Objects.requireNonNull;
@@ -72,8 +72,8 @@ public abstract class BaseTest {
     @BeforeAll
     void before() {
         keyPair = generateKeyPair(2048);
-        token = createJWTToken(keyPair.getPrivate(), USER_1, new Date(System.currentTimeMillis() + 60 * 1000));
-        expiredToken = createJWTToken(keyPair.getPrivate(), USER_1, new Date(System.currentTimeMillis() - 1));
+        token = mockJWTToken(keyPair.getPrivate(), USER_1, new Date(System.currentTimeMillis() + 60 * 1000));
+        expiredToken = mockJWTToken(keyPair.getPrivate(), USER_1, new Date(System.currentTimeMillis() - 1));
     }
 
     @BeforeEach

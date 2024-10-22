@@ -6,6 +6,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 public class KafkaTestConsumer {
 
     @KafkaListener(topics = "${spring.kafka.topic}")
-    public void listener(ConsumerRecord<String, String> ignored) {
+    public void listener(ConsumerRecord<String, String> consumerRecord) {
     }
 }
