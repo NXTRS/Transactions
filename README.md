@@ -26,3 +26,4 @@ Docker Desktop must be installed on your system.
 
  Integration tests are running by making use of spring testcontainers, which spins up its own 
  docker container which holds the necessary components for integration testing (a test specific kafka & postgres)
+The test are not comprehensive/do not cover all cases, but serve more as an example of how to write integration tests.
