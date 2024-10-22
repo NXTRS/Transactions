@@ -20,23 +20,23 @@ public class TransactionService {
     @PushTransactionNotification
     public TransactionDto createTransaction(TransactionDto transactionDto) {
         var savedEntity = transactionRepository.save(mapper.toEntity(transactionDto));
-        log.info("Successfully stored a new transaction for user {}", savedEntity.getUserId());
+        log.info("Successfully stored a new transaction for user [{}]", savedEntity.getUserId());
 
         return mapper.toDto(savedEntity);
     }
 
     public Page<TransactionDto> getTransactions(String userId, Pageable pageable) {
-        var entities = transactionRepository.findAllByUserId(userId, pageable);
-        log.info("Found {} transactions for user {}", entities.getNumberOfElements(), userId);
+        var entitiesPage = transactionRepository.findAllByUserId(userId, pageable);
+        log.info("Found [{}] transactions for user [{}]", entitiesPage.getNumberOfElements(), userId);
 
-        return entities.map(mapper::toDto);
+        return entitiesPage.map(mapper::toDto);
     }
 
     public TransactionDto getTransactionById(Long id) {
         var entityOptional = transactionRepository.findById(id);
         entityOptional.ifPresentOrElse(
-                value -> log.info("Retrieved transaction with id:{}", id),
-                () -> log.info("Transaction with id: {} not found", id));
+                value -> log.info("Retrieved transaction with id: [{}]", id),
+                () -> log.info("Transaction with id: [{}] not found", id));
 
         return mapper.toDto(entityOptional.orElse(null));
     }

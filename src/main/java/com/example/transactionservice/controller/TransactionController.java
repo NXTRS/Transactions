@@ -30,7 +30,7 @@ public class TransactionController {
      */
     @PostMapping
     public ResponseEntity<EntityModel<TransactionDto>> createTransaction(@RequestBody @Valid TransactionDto transactionDto) {
-        log.info("Received new transaction request for user: {}", transactionDto.userId());
+        log.info("Received new transaction request for user: [{}]", transactionDto.userId());
         var createdTransactionDto = transactionService.createTransaction(transactionDto);
         var entityModel = EntityModel.of(createdTransactionDto);
 
@@ -48,7 +48,7 @@ public class TransactionController {
     public ResponseEntity<PagedModel<EntityModel<TransactionDto>>> getTransactions(@RequestParam String userId,
                                                                                    @RequestParam(defaultValue = "0") int page,
                                                                                    @RequestParam(defaultValue = "10") int size) {
-        log.info("Received get transactions request with page: {}, size: {} for user: {}", page, size, userId);
+        log.info("Received get transactions request with page: [{}], size: [{}] for user: [{}]", page, size, userId);
         var transactionPage = transactionService.getTransactions(userId, PageRequest.of(page, size));
         // Convert each transaction to an EntityModel and add HATEOAS links for every element
         var pagedModel = convertToEntityModel(page, size, transactionPage);
