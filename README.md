@@ -16,6 +16,7 @@ Docker Desktop must be installed on your system.
 > docker compose up -d 
  
    in the Notifications project as well. 
+   
 3. Run the spring boot application. It will start on port **8080**.
 4. The application db schema is generated automatically by spring 
    via the *"spring.jpa.generate-ddl: true"* property, nothing needs to be done
