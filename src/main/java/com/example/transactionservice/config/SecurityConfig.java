@@ -20,21 +20,6 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 class SecurityConfig {
 
     @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
-
-    @Bean
-    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new RegisterSessionAuthenticationStrategy(sessionRegistry());
-    }
-
-    @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
-    }
-
-    @Bean
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
         // websocket connections must be excluded because they cannot have security headers, see WebSocketAuthenticationInterceptor
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
